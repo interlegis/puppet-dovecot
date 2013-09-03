@@ -1,0 +1,7 @@
+#init.pp
+
+class dovecot (
+		
+	) {
+
+}
