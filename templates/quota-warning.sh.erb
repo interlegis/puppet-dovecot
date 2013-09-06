@@ -1,0 +1,10 @@
+#!/bin/sh
+PERCENT=$1
+USER=$2
+cat << EOF | /usr/lib/dovecot/dovecot-lda -d $USER -o "plugin/quota=<%= @quota_backends[@quota_backends.keys[0]] %>:noenforcing"
+From: <%= @quota_warning_from %>
+Subject: <%= @quota_warning_subject %>
+
+<%= @quota_warning_message %>
+
+EOF

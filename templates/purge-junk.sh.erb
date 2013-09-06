@@ -1,0 +1,17 @@
+#!/bin/bash
+# MANAGED BY PUPPET !!!
+
+# dovecot details
+DOVEADM="/usr/bin/doveadm"
+
+results=`find <%=@maillocation%> -mindepth 1 -maxdepth 1 -type d -printf "%f\n"`
+
+# Loop through each row
+for row in $results
+        do
+        echo "Purging Trash and <%=@spamfldrname%> folders from mailbox $row..."
+        # Purge expired Trash
+        $DOVEADM -v expunge mailbox <%=@trashfldrname%> -u $row savedbefore <%=@trashretention%>
+        # Purge expired Junk
+        $DOVEADM -v expunge mailbox <%=@spamfldrname%>  -u $row savedbefore <%=@spamretention%>
+done

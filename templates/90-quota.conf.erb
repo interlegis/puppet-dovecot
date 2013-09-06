@@ -1,0 +1,77 @@
+##
+## Quota configuration.
+##
+
+# Note that you also have to enable quota plugin in mail_plugins setting.
+# <doc/wiki/Quota.txt>
+
+##
+## Quota limits
+##
+
+# Quota limits are set using "quota_rule" parameters. To get per-user quota
+# limits, you can set/override them by returning "quota_rule" extra field
+# from userdb. It's also possible to give mailbox-specific limits, for example
+# to give additional 100 MB when saving to Trash:
+
+plugin {
+  <% @quota_rules.each_pair do | key, value | -%>
+  <%= key %> = <%= value %>
+  <% end -%>
+}
+
+##
+## Quota warnings
+##
+
+# You can execute a given command when user exceeds a specified quota limit.
+# Each quota root has separate limits. Only the command for the first
+# exceeded limit is excecuted, so put the highest limit first.
+# The commands are executed via script service by connecting to the named
+# UNIX socket (quota-warning below).
+# Note that % needs to be escaped as %%, otherwise "% " expands to empty.
+
+plugin {
+  <% @quota_warnings.each_pair do | key, value | -%>
+  <%= key %> = <%= value %>
+  <% end -%>
+}
+
+# Example quota-warning service. The unix listener's permissions should be
+# set in a way that mail processes can connect to it. Below example assumes
+# that mail processes run as vmail user. If you use mode=0666, all system users
+# can generate quota warnings to anyone.
+<% @quota_warning_svcs.each do |svc|-%>
+service <%= svc['name'] %> {
+  executable = <%= svc['executable'] %>
+  user = <%= svc['user'] %>
+  unix_listener <%= svc['name'] %> {
+    user = <%= svc['user'] %>
+  }
+}
+<% end -%>
+
+##
+## Quota backends
+##
+
+# Multiple backends are supported:
+#   dirsize: Find and sum all the files found from mail directory.
+#            Extremely SLOW with Maildir. It'll eat your CPU and disk I/O.
+#   dict: Keep quota stored in dictionary (eg. SQL)
+#   maildir: Maildir++ quota
+#   fs: Read-only support for filesystem quota
+
+plugin {
+  <% @quota_backends.each_pair do | key, value | -%>
+  <%= key %> = <%= value %>
+  <% end -%>
+}
+
+# Multiple quota roots are also possible, for example this gives each user
+# their own 100MB quota and one shared 1GB quota within the domain:
+plugin {
+  <% @quota_roots.each_pair do | key, value | -%>
+  <%= key %> = <%= value %>
+  <% end -%>
+}
