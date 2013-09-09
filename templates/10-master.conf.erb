@@ -92,11 +92,12 @@ service auth {
     group = <%= @auth_userdb_group -%>
     <% end -%>
   }
-
+  <% if @enable_postfix_auth %>
   # Postfix smtp-auth
-  #unix_listener /var/spool/postfix/private/auth {
-  #  mode = 0666
-  #}
+  unix_listener /var/spool/postfix/private/dovecot-auth {
+    mode = 0666
+  }
+  <% end %>
 
   # Auth process is run as this user.
   #user = $default_internal_user

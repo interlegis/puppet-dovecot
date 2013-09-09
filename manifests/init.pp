@@ -44,7 +44,7 @@ Mail Admin
 		$enable_sieve = false,
 		$sieve_global_path = '/etc/dovecot/sieve/default.sieve',
 		$sieve_before = '',
-						
+		$enable_postfix_auth = false,						
 	) {
     	case $::operatingsystem {
     		Ubuntu : { include dovecot::ubuntu }
