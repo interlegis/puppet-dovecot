@@ -15,7 +15,7 @@
 # to give additional 100 MB when saving to Trash:
 
 plugin {
-  <% @quota_rules.each_pair do | key, value | -%>
+  <% @quota_rules.sort_by {|key,value| key}.each do |key,value| -%>
   <%= key %> = <%= value %>
   <% end -%>
 }
