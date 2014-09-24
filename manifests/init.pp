@@ -44,7 +44,11 @@ Mail Admin
 		$enable_sieve = false,
 		$sieve_global_path = '/etc/dovecot/sieve/default.sieve',
 		$sieve_before = '',
-		$enable_postfix_auth = false,						
+		$enable_postfix_auth = false,
+		$auth_gssapi_hostname = $fqdn,
+		$auth_krb5_keytab = '/etc/krb5.keytab',
+		$auth_realms = $domain,
+		$auth_default_realm = $domain,						
 	) {
     	case $::operatingsystem {
     		Ubuntu : { include dovecot::ubuntu }

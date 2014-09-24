@@ -7,7 +7,7 @@ class dovecot::base {
   	}
 
 	service {'dovecot':
-		ensure => running,
+		#ensure => running,
 		enable => true,
 		restart => "/etc/init.d/dovecot reload",
 		require => Package['Dovecot'],
@@ -102,6 +102,10 @@ class dovecot::base {
                 	content => template('dovecot/quota-warning.sh.erb'),
                 	require => Package["dovecot-common"],
 		}
-	}	
+	}
 
+	## GSSAPI		
+	if $dovecot::auth_mecanisms =~ /gssapi/ {
+		package { "dovecot-gssapi": ensure => present }
+	}
 }

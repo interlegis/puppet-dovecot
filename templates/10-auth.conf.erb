@@ -27,12 +27,15 @@
 # them. You can leave it empty if you don't want to support multiple realms.
 # Many clients simply use the first one listed here, so keep the default realm
 # first.
-#auth_realms =
+<% if @auth_mecanisms =~ /gssapi/ -%>
+auth_realms = <%= @auth_realms %>
+<% end -%>
 
 # Default realm/domain to use if none was specified. This is used for both
 # SASL realms and appending @domain to username in plaintext logins.
-#auth_default_realm = 
-
+<% if @auth_mecanisms =~ /gssapi/ -%>
+auth_default_realm = <%= @auth_default_realm %>
+<% end -%>
 # List of allowed characters in username. If the user-given username contains
 # a character not listed in here, the login automatically fails. This is just
 # an extra check to make sure user can't exploit any potential quote escaping
@@ -69,12 +72,16 @@
 # Host name to use in GSSAPI principal names. The default is to use the
 # name returned by gethostname(). Use "$ALL" (with quotes) to allow all keytab
 # entries.
-#auth_gssapi_hostname =
+<% if @auth_mecanisms =~ /gssapi/ -%>
+auth_gssapi_hostname = <%= @auth_gssapi_hostname %>
+<% end -%>
 
 # Kerberos keytab to use for the GSSAPI mechanism. Will use the system
 # default (usually /etc/krb5.keytab) if not specified. You may need to change
 # the auth service to run as root to be able to read this file.
-#auth_krb5_keytab = 
+<% if @auth_mecanisms =~ /gssapi/ -%>
+auth_krb5_keytab = <%= @auth_krb5_keytab %>
+<% end -%>
 
 # Do NTLM and GSS-SPNEGO authentication using Samba's winbind daemon and
 # ntlm_auth helper. <doc/wiki/Authentication/Mechanisms/Winbind.txt>
